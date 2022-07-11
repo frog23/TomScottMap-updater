@@ -37,12 +37,21 @@ else
 fi
 sed -e "1,/^{\"comment\":\"\/\/Videos from Tom's second channel: Tom Scott plus\"},/d" data_new2.json >> data_new3.json
 
-cp -f data_new3.json data.json
+NEWVIDEOS=`php api.php channel=3`
+sed "/^{\"comment\":\"\/\/Videos from Tom's, Gary's, Chris's, Matt's (second) channel: The Technical Difficulties\"},/q" data_new3.json > data_new4.json
+if [[ ! -z "$NEWVIDEOS" ]]
+then
+	echo "$NEWVIDEOS" >> data_new4.json
+	echo "$NEWVIDEOS"
+else
+	echo "The Technical Difficulties: no new videos"
+fi
+sed -e "1,/^{\"comment\":\"\/\/Videos from Tom's, Gary's, Chris's, Matt's (second) channel: The Technical Difficulties\"},/d" data_new3.json >> data_new4.json
+
+
+cp -f data_new4.json data.json
 cp data.json git/data.json
 cd git/
 git add data.json
 git commit -m "new videos added automatically (not categorized or referenced yet)"
 git push
-
-#TODO: add section for: {"comment":"//Videos from the Technical Difficulties channel"},
-

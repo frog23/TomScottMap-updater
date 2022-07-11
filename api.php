@@ -48,6 +48,17 @@ if($channel=="0"){
 	}
 	echo substr($output,0,strlen($output)-1);
 
+}else if($channel=="3"){
+	
+	$xml = simplexml_load_file("https://www.youtube.com/feeds/videos.xml?channel_id=UCO-zhhas4n_kAPHaeLe1qnQ");
+	$output = "";
+	foreach ($xml->entry as $entry) {
+		if(!in_array(str_replace("yt:video:","",$entry->id), $video_ids)){
+			$output = $output . '{"id":"'.str_replace("yt:video:","",$entry->id).'", "title":"'.str_replace("\"","\\\"", str_replace("\\","\\\\", $entry->title[0])).'", "lat":"", "long":"", "category":"TechDif", "comment":"", "status":"open", "internal_comment":""},'."\n";
+		}
+	}
+	echo substr($output,0,strlen($output)-1);
+
 }
 	
 	//{"data":[
